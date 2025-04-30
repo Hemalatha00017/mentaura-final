@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentaura Discord - Student Achievement Platform</title>
+    <style>
+        :root {
+            --white-bg: #FFFFFF;
+            --light-lavender: #F0F0FF;
+            --medium-lavender: #E0D0FF;
+            --dark-lavender: #D0C0FF;
+            --text-dark: #222222;
+            --text-light: #555555;
+            --accent: #9370DB;
+            --accent-hover: #7B68EE;
+            --success: #28A745;
+            --danger: #DC3545;
+            --warning: #FFC107;
+            --channel: #777777;
+            --online: #28A745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white-bg);
+            color: var(--text-dark);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .server-list {
+            background-color: var(--light-lavender);
+            width: 72px;
+            height: 100vh;
+            padding: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+        
+        .server-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--medium-lavender);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-weight: bold;
+            cursor: pointer;
+            transition: border-radius 0.2s ease, background-color 0.2s ease;
+        }
+        
+        .server-icon:hover {
+            border-radius: 30%;
+            background-color: var(--accent);
+        }
+        
+        .server-icon.active {
+            border-radius: 30%;
+            background-color: var(--accent);
+        }
+        
+        .separator {
+            width: 32px;
+            height: 2px;
+            background-color: var(--dark-lavender);
+            margin: 8px 0;
+        }
+        
+        .channels {
+            background-color: var(--light-lavender);
+            width: 240px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .server-header {
+            padding: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+        
+        .channel-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 8px;
+        }
+        
+        .channel-category {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--channel);
+            margin: 16px 0 4px 8px;
+        }
+        
+        .channel {
+            display: flex;
+            align-items: center;
+            padding: 6px 8px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            cursor: pointer;
+            color: var(--channel);
+        }
+        
+        .channel:hover {
+            background-color: rgba(147, 112, 219, 0.2);
+            color: var(--text-dark);
+        }
+        
+        .channel.active {
+            background-color: rgba(147, 112, 219, 0.3);
+            color: var(--text-dark);
+        }
+        
+        .channel-icon {
+            margin-right: 6px;
+        }
+        
+        .user-controls {
+            height: 52px;
+            background-color: var(--medium-lavender);
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            margin-right: 8px;
+            position: relative;
+        }
+        
+        .status-indicator {
+            position: absolute;
+            right: -2px;
+            bottom: -2px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--online);
+            border: 2px solid var(--light-lavender);
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .username {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .user-status {
+            font-size: 12px;
+            color: var(--channel);
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .channel-header {
+            height: 48px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            background-color: var(--white-bg);
+        }
+        
+        .channel-name {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .channel-topic {
+            color: var(--channel);
+            font-size: 14px;
+            border-left: 1px solid var(--channel);
+            padding-left: 8px;
+            margin-left: 8px;
+        }
+        
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--white-bg);
+        }
+        
+        .message {
+            display: flex;
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white-bg);
+            font-weight: bold;
+        }
+        
+        .message-content {
+            flex: 1;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        
+        .message-author {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            color: var(--channel);
+        }
+        
+        .message-text {
+            line-height: 1.4;
+        }
+        
+        .message-input-container {
+            padding: 0 16px 24px;
+            position: relative;
+        }
+        
+        .message-input {
+            background-color: var(--light-lavender);
+            border-radius: 8px;
+            padding: 12px 48px 12px 12px;
+            color: var(--text-dark);
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+        }
+        
+        .message-input::placeholder {
+            color: var(--channel);
+        }
+        
+        .send-button {
+            position: absolute;
+            right: 24px;
+            bottom: 32px;
+            background-color: var(--accent);
+            border: none;
+            color: var(--white-bg);
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .send-button:hover {
+            background-color: var(--accent-hover);
+        }
+        
+        .right-sidebar {
+            width: 240px;
+            background-color: var(--light-lavender);
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--channel);
+        }
+        
+        .member-list {
+            padding: 8px;
+        }
+        
+        .member-category {
+            margin: 8px 0 4px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--channel);
+            text-transform: uppercase;
+        }
+        
+        .member {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .member:hover {
+            background-color: rgba(147, 112, 219, 0.2);
+        }
+        
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            margin-right: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white-bg);
+            font-weight: bold;
+        }
+        
+        .member-name {
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+        
+        .button {
+            background-color: var(--accent);
+            color: var(--white-bg);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .button:hover {
+            background-color: var(--accent-hover);
+        }
+        
+        .achievement-form {
+            background-color: var(--light-lavender);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .form-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            background-color: var(--white-bg);
+            border: 1px solid var(--dark-lavender);
+            padding: 8px;
+            border-radius: 4px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .leaderboard {
+            background-color: var(--light-lavender);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            background-color: var(--white-bg);
+        }
+        
+        .leaderboard-rank {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--white-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .leaderboard-rank.gold {
+            background-color: #FFD700;
+        }
+        
+        .leaderboard-rank.silver {
+            background-color: #C0C0C0;
+        }
+        
+        .leaderboard-rank.bronze {
+            background-color: #CD7F32;
+        }
+        
+        .leaderboard-name {
+            flex: 1;
+            font-weight: bold;
+        }
+        
+        .leaderboard-score {
+            font-weight: bold;
+            color: var(--success);
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 16px;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background-color: var(--light-lavender);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--accent);
+            color: var(--text-dark);
+        }
+        
+        .content-area {
+            display: none;
+        }
+        
+        .content-area.active {
+            display: block;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background-color: var(--accent);
+            color: var(--white-bg);
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        
+        .achievement-card {
+            background-color: var(--light-lavender);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .achievement-details {
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        
+        .achievement-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--channel);
+        }
+        
+        .achievement-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        
+        .achievement-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .action-button {
+            background-color: transparent;
+            border: none;
+            color: var(--channel);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .action-button:hover {
+            color: var(--text-dark);
+        }
+        
+        .comment-section {
+            margin-top: 16px;
+            padding-top: 8px;
+            border-top: 1px solid var(--dark-lavender);
+        }
+        
+        .comment-input {
+            width: 100%;
+            background-color: var(--white-bg);
+            border: 1px solid var(--dark-lavender);
+            padding: 8px;
+            border-radius: 4px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            resize: none;
+        }
+        
+        .comment-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .comment {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .comment-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white-bg);
+            font-size: 12px;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-author {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: var(--white-bg);
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--channel);
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-dark);
+        }
+        
+        .modal-body {
+            padding: 16px;
+        }
+        
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        
+        .professor-card {
+            display: flex;
+            background-color: var(--light-lavender);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .professor-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white-bg);
+            font-weight: bold;
+        }
+        
+        .professor-info {
+            flex: 1;
+        }
+        
+        .professor-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .professor-title {
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        
+        .professor-subjects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .professor-contact {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: var(--light-lavender);
+            color: var(--text-dark);
+            padding: 12px 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast-icon {
+            margin-right: 8px;
+            font-size: 20px;
+            color: var(--success);
+        }
+        
+        .toast-message {
+            font-weight: 500;
+        }
+        
+        .student-profile {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white-bg);
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .profile-status {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .profile-bio {
+            background-color: var(--light-lavender);
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        
+        .profile-section {
+            margin-top: 16px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .profile-achievements,
+        .profile-skills,
+        .profile-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .profile-achievement,
+        .profile-skill,
+        .profile-interest {
+            background-color: var(--accent);
+            color: var(--white-bg);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .profile-points {
+            font-weight: bold;
+            color: var(--success);
+        }
+        
+        .chat-message {
+            transition: background-color 0.2s ease;
+        }
+        
+        .chat-message:hover {
+            background-color: rgba(147, 112, 219, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="server-list">
+        <div class="server-icon active">MD</div>
+        <div class="server-icon">M</div>
+        <div class="server-icon">S</div>
+        <div class="separator"></div>
+        <div class="server-icon">+</div>
+    </div>
+    
+    <div class="channels">
+        <div class="server-header">Mentaura Discord</div>
+        <div class="channel-list">
+            <div class="channel-category">Main Channels</div>
+            <div class="channel active">
+                <span class="channel-icon">#</span>
+                <span>general</span>
+            </div>
+            <div class="channel">
+                <span class="channel-icon">#</span>
+                <span>announcements</span>
+            </div>
+            
+            <div class="channel-category">Academic Channels</div>
+            <div class="channel">
+                <span class="channel-icon">#</span>
+                <span>mathematics</span>
+            </div>
+            <div class="channel">
+                <span class="channel-icon">#</span>
+                <span>computer-science</span>
+            </div>
+            <div class="channel">
+                <span class="channel-icon">#</span>
+                <span>physics</span>
+            </div>
+            <div class="channel">
+                <span class="channel-icon">#</span>
+                <span>biology</span>
+            </div>
+            
+            <div class="channel-category">Achievement System</div>
+            <div class="channel" data-tab="achievements">
+                <span class="channel-icon">#</span>
+                <span>achievements</span>
+            </div>
+            <div class="channel" data-tab="leaderboard">
+                <span class="channel-icon">#</span>
+                <span>leaderboard</span>
+            </div>
+            
+            <div class="channel-category">Expert Help</div>
+            <div class="channel" data-tab="professors">
+                <span class="channel-icon">#</span>
+                <span>ask-professors</span>
+            </div>
+            <div class="channel">
+                <span class="channel-icon">#</span>
+                <span>tutoring</span>
+            </div>
+        </div>
+        
+        <div class="user-controls">
+            <div class="user-avatar">
+                <div class="status-indicator"></div>
+            </div>
+            <div class="user-info">
+                <div class="username">Student</div>
+                <div class="user-status">Online</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="channel-header">
+            <span class="channel-name"># general</span>
+            <span class="channel-topic">Discuss general topics</span>
+        </div>
+        
+        <div class="chat-area">
+            <div class="tab-container">
+                <div class="tab active" data-tab="achievements">Achievements</div>
+                <div class="tab" data-tab="leaderboard">Leaderboard</div>
+                <div class="tab" data-tab="professors">Professor Help</div>
+                <div class="tab" data-tab="chat">Chat</div>
+            </div>
+            
+            <div class="content-area active" id="achievements">
+                <div class="achievement-form">
+                    <div class="form-title">Share Your Achievement</div>
+                    <input type="text" class="form-input" id="achievement-title" placeholder="Achievement Title">
+                    <textarea class="form-input" id="achievement-description" placeholder="Describe your achievement" rows="3"></textarea>
+                    <input type="text" class="form-input" id="achievement-tags" placeholder="Tags (comma separated)">
+                    <div class="form-actions">
+                        <button class="button" id="post-achievement">Post Achievement</button>
+                    </div>
+                </div>
+                
+                <div class="achievement-cards">
+                    <!-- Achievement cards will be added here dynamically -->
+                </div>
+            </div>
+            
+            <div class="content-area" id="leaderboard">
+                <div class="leaderboard">
+                    <div class="form-title">Student Leaderboard</div>
+                    <div class="leaderboard-list">
+                        <!-- Leaderboard entries will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-area" id="professors">
+                <div class="professor-list">
+                    <!-- Professor cards will be added here dynamically -->
+                </div>
+                
+                <div class="achievement-form">
+                    <div class="form-title">Ask a Question</div>
+                    <input type="text" class="form-input" id="question-title" placeholder="Question Title">
+                    <textarea class="form-input" id="question-text" placeholder="Type your question here..." rows="3"></textarea>
+                    <select class="form-input" id="professor-select">
+                        <option value="">Select a Professor</option>
+                        <option value="prof1">Dr. Smith (Math)</option>
+                        <option value="prof2">Dr. Johnson (Computer Science)</option>
+                        <option value="prof3">Dr. Williams (Physics)</option>
+                        <option value="prof4">Dr. Davis (Biology)</option>
+                    </select>
+                    <div class="form-actions">
+                        <button class="button" id="ask-question">Submit Question</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-area" id="chat">
+                <div class="message-list">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+                <div class="message-input-container">
+                    <textarea class="message-input" placeholder="Message #general" id="chat-input"></textarea>
+                    <button class="send-button" id="send-chat-btn">➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="right-sidebar">
+        <div class="sidebar-header">Online Members</div>
+        <div class="member-list">
+            <div class="member-category">Professors - 4</div>
+            <div class="member">
+                <div class="member-avatar">S</div>
+                <div class="member-name">Dr. Smith</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">J</div>
+                <div class="member-name">Dr. Johnson</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">W</div>
+                <div class="member-name">Dr. Williams</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">D</div>
+                <div class="member-name">Dr. Davis</div>
+            </div>
+            
+            <div class="member-category">Students - 10</div>
+            <div class="member">
+                <div class="member-avatar">A</div>
+                <div class="member-name">Alex Johnson</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">S</div>
+                <div class="member-name">Sarah Williams</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">M</div>
+                <div class="member-name">Michael Brown</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">J</div>
+                <div class="member-name">Jessica Davis</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">D</div>
+                <div class="member-name">David Wilson</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">E</div>
+                <div class="member-name">Emily Taylor</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">R</div>
+                <div class="member-name">Ryan Miller</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">O</div>
+                <div class="member-name">Olivia Martin</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">T</div>
+                <div class="member-name">Thomas Anderson</div>
+            </div>
+            <div class="member">
+                <div class="member-avatar">L</div>
+                <div class="member-name">Lily Moore</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Achievement Details</div>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be added here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="button" id="modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="profile-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Student Profile</div>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="profile-modal-body">
+                <!-- Student profile content will be added here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="button" id="send-message-btn">Send Message</button>
+                <button class="button" id="profile-modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="message-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Send Message</div>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-input" id="message-text" placeholder="Type your message here..." rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="button" id="send-message-submit">Send</button>
+                <button class="button" id="message-modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for achievements
+        const achievements = [
+            {
+                id: 1,
+                title: "Completed Advanced Calculus Course",
+                description: "Finished the Advanced Calculus course with an A+ grade. Mastered complex integration techniques and differential equations.",
+                author: "Sarah Williams",
+                date: "2025-04-25",
+                tags: ["mathematics", "calculus", "course-completion"],
+                likes: 12,
+                comments: [
+                    { id: 1, author: "Michael Brown", text: "Great job, Sarah!", timestamp: "2025-04-25T15:00:00" },
+                    { id: 2, author: "Dr. Smith", text: "Impressive work!", timestamp: "2025-04-25T16:00:00" }
+                ]
+            },
+            {
+                id: 2,
+                title: "First Place in Science Fair",
+                description: "Won first place in the annual science fair with my project on renewable energy sources. The judges were impressed by the innovative solar panel design.",
+                author: "Michael Brown",
+                date: "2025-04-20",
+                tags: ["science-fair", "renewable-energy", "award"],
+                likes: 24,
+                comments: [
+                    { id: 1, author: "Jessica Davis", text: "Amazing project!", timestamp: "2025-04-20T14:00:00" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Published Research Paper",
+                description: "My research paper on machine learning algorithms was published in the university journal. This is my first publication as an undergraduate student.",
+                author: "Jessica Davis",
+                date: "2025-04-15",
+                tags: ["research", "machine-learning", "publication"],
+                likes: 31,
+                comments: []
+            }
+        ];
+        
+        // Sample data for leaderboard
+        const leaderboard = [
+            { id: 1, name: "Sarah Williams", score: 1250, achievements: 15 },
+            { id: 2, name: "Michael Brown", score: 1120, achievements: 12 },
+            { id: 3, name: "Jessica Davis", score: 980, achievements: 11 },
+            { id: 4, name: "David Wilson", score: 840, achievements: 9 },
+            { id: 5, name: "Emily Taylor", score: 760, achievements: 8 },
+            { id: 6, name: "Ryan Miller", score: 690, achievements: 7 },
+            { id: 7, name: "Olivia Martin", score: 610, achievements: 6 },
+            { id: 8, name: "Thomas Anderson", score: 540, achievements: 5 },
+            { id: 9, name: "Lily Moore", score: 480, achievements: 4 },
+            { id: 10, name: "Alex Johnson", score: 410, achievements: 3 }
+        ];
+        
+        // Sample data for professors
+        const professors = [
+            {
+                id: 1,
+                name: "Dr. Smith",
+                title: "Professor of Mathematics",
+                subjects: ["Calculus", "Linear Algebra", "Differential Equations"],
+                online: true
+            },
+            {
+                id: 2,
+                name: "Dr. Johnson",
+                title: "Professor of Computer Science",
+                subjects: ["Algorithms", "Machine Learning", "Data Structures"],
+                online: true
+            },
+            {
+                id: 3,
+                name: "Dr. Williams",
+                title: "Professor of Physics",
+                subjects: ["Quantum Mechanics", "Thermodynamics", "Electromagnetism"],
+                online: false
+            },
+            {
+                id: 4,
+                name: "Dr. Davis",
+                title: "Professor of Biology",
+                subjects: ["Genetics", "Microbiology", "Ecology"],
+                online: true
+            }
+        ];
+
+        // Sample data for students
+        const students = {
+            "Sarah Williams": {
+                avatar: "S",
+                status: "online",
+                achievements: 15,
+                skills: ["Mathematics", "Research", "Problem Solving"],
+                interests: ["Quantum Physics", "AI", "Renewable Energy"],
+                points: 1250,
+                bio: "Mathematics major with a passion for theoretical physics and AI applications."
+            },
+            "Michael Brown": {
+                avatar: "M",
+                status: "online",
+                achievements: 12,
+                skills: ["Science", "Public Speaking", "Engineering"],
+                interests: ["Renewable Energy", "Robotics", "Space Exploration"],
+                points: 1120,
+                bio: "Engineering student focused on sustainable energy solutions."
+            },
+            "Jessica Davis": {
+                avatar: "J",
+                status: "idle",
+                achievements: 11,
+                skills: ["Programming", "Data Analysis", "Machine Learning"],
+                interests: ["AI Ethics", "Neural Networks", "Cognitive Science"],
+                points: 980,
+                bio: "Computer Science major researching ethical AI development."
+            },
+            "David Wilson": {
+                avatar: "D",
+                status: "online",
+                achievements: 9,
+                skills: ["Biology", "Chemistry", "Lab Techniques"],
+                interests: ["Genetics", "Biotechnology", "Medicine"],
+                points: 840,
+                bio: "Pre-med student specializing in genetic research."
+            },
+            "Emily Taylor": {
+                avatar: "E",
+                status: "dnd",
+                achievements: 8,
+                skills: ["Physics", "Mathematics", "Programming"],
+                interests: ["Quantum Computing", "Astrophysics", "AI"],
+                points: 760,
+                bio: "Physics PhD candidate researching quantum algorithms."
+            },
+            "Ryan Miller": {
+                avatar: "R",
+                status: "online",
+                achievements: 7,
+                skills: ["Mathematics", "Programming"],
+                interests: ["Data Science", "Machine Learning"],
+                points: 690,
+                bio: "Data science enthusiast."
+            },
+            "Olivia Martin": {
+                avatar: "O",
+                status: "online",
+                achievements: 6,
+                skills: ["Biology", "Research"],
+                interests: ["Ecology", "Conservation"],
+                points: 610,
+                bio: "Biology major interested in environmental conservation."
+            },
+            "Thomas Anderson": {
+                avatar: "T",
+                status: "idle",
+                achievements: 5,
+                skills: ["Physics", "Engineering"],
+                interests: ["Robotics", "AI"],
+                points: 540,
+                bio: "Engineering student with a focus on robotics."
+            },
+            "Lily Moore": {
+                avatar: "L",
+                status: "online",
+                achievements: 4,
+                skills: ["Chemistry", "Lab Techniques"],
+                interests: ["Biochemistry", "Medicine"],
+                points: 480,
+                bio: "Chemistry major aiming for a career in medical research."
+            },
+            "Alex Johnson": {
+                avatar: "A",
+                status: "online",
+                achievements: 3,
+                skills: ["Computer Science", "Web Development"],
+                interests: ["Software Engineering", "UI/UX"],
+                points: 410,
+                bio: "Computer science student passionate about building user-friendly applications."
+            }
+        };
+
+        // Sample chat messages
+        const chatMessages = [
+            {
+                id: 1,
+                author: "Sarah Williams",
+                content: "Has anyone worked on the calculus problem set yet? I'm stuck on question 3.",
+                timestamp: "2025-04-28T14:30:00",
+                channel: "mathematics"
+            },
+            {
+                id: 2,
+                author: "Michael Brown",
+                content: "I just finished it. Question 3 is tricky - you need to use integration by parts twice.",
+                timestamp: "2025-04-28T14:35:00",
+                channel: "mathematics"
+            },
+            {
+                id: 3,
+                author: "Dr. Smith",
+                content: "Good observation Michael. Sarah, I can help you during office hours if you're still stuck.",
+                timestamp: "2025-04-28T14:40:00",
+                channel: "mathematics"
+            },
+            {
+                id: 4,
+                author: "Jessica Davis",
+                content: "Does anyone want to form a study group for the algorithms exam next week?",
+                timestamp: "2025-04-28T15:00:00",
+                channel: "computer-science"
+            },
+            {
+                id: 5,
+                author: "Alex Johnson",
+                content: "Welcome everyone to Mentaura Discord! Let's help each other succeed!",
+                timestamp: "2025-04-28T10:00:00",
+                channel: "general"
+            }
+        ];
+
+        // DOM elements
+        const achievementCardsContainer = document.querySelector('.achievement-cards');
+        const leaderboardList = document.querySelector('.leaderboard-list');
+        const professorList = document.querySelector('.professor-list');
+        const messageList = document.querySelector('.message-list');
+        const tabs = document.querySelectorAll('.tab');
+        const contentAreas = document.querySelectorAll('.content-area');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseButtons = document.querySelectorAll('.modal-close, #modal-close-btn, #profile-modal-close-btn, #message-modal-close-btn');
+        const postAchievementBtn = document.getElementById('post-achievement');
+        const askQuestionBtn = document.getElementById('ask-question');
+        const chatInput = document.getElementById('chat-input');
+        const channels = document.querySelectorAll('.channel');
+        const sendMessageBtn = document.getElementById('send-message-btn');
+        const profileModalOverlay = document.getElementById('profile-modal-overlay');
+        const messageModalOverlay = document.getElementById('message-modal-overlay');
+        const messageTextInput = document.getElementById('message-text');
+        const sendMessageSubmit = document.getElementById('send-message-submit');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+
+        // Current user data
+        const currentUser = {
+            name: "You",
+            avatar: "Y",
+            status: "online"
+        };
+
+        // Initialize WebSocket
+        let socket = null;
+        function initWebSocket() {
+            try {
+                socket = new WebSocket('ws://localhost:8080');
+                socket.onopen = () => {
+                    console.log('Connected to WebSocket server');
+                    showToast('Connected to chat server');
+                };
+                socket.onmessage = (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        chatMessages.push(message);
+                        if (message.channel === getCurrentChannel()) {
+                            renderChatMessages(message.channel);
+                        }
+                        showToast('New message received!');
+                    } catch (e) {
+                        console.error('Error processing WebSocket message:', e);
+                    }
+                };
+                socket.onclose = () => {
+                    console.log('Disconnected from WebSocket server');
+                    showToast('Lost connection to chat server', 'warning');
+                };
+                socket.onerror = (e) => {
+                    console.error('WebSocket error:', e);
+                };
+            } catch (e) {
+                console.error('WebSocket initialization failed:', e);
+                showToast('Failed to connect to chat server', 'warning');
+            }
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                initWebSocket();
+                renderAchievements();
+                renderLeaderboard();
+                renderProfessors();
+                renderGeneralChat();
+                setupEventListeners();
+            } catch (e) {
+                console.error('Error initializing app:', e);
+                showToast('Error loading app', 'danger');
+            }
+        });
+
+        // Render achievements
+        function renderAchievements() {
+            if (!achievementCardsContainer) {
+                console.error('Achievement cards container not found');
+                return;
+            }
+            achievementCardsContainer.innerHTML = '';
+            
+            achievements.forEach(achievement => {
+                const achievementCard = document.createElement('div');
+                achievementCard.className = 'achievement-card';
+                achievementCard.innerHTML = `
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-details">${achievement.description}</div>
+                    <div class="achievement-footer">
+                        <div>Posted by ${achievement.author} on ${achievement.date}</div>
+                        <div>${achievement.likes} likes • ${achievement.comments.length} comments</div>
+                    </div>
+                    <div class="achievement-tags">
+                        ${achievement.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}
+                    </div>
+                    <div class="achievement-actions">
+                        <button class="action-button like-btn" data-id="${achievement.id}">
+                            <span>👍</span> Like
+                        </button>
+                        <button class="action-button comment-btn" data-id="${achievement.id}">
+                            <span>💬</span> Comment
+                        </button>
+                        <button class="action-button view-btn" data-id="${achievement.id}">
+                            <span>👁</span> View Details
+                        </button>
+                    </div>
+                    <div class="comment-section" id="comment-section-${achievement.id}" style="display: none;">
+                        <textarea class="comment-input" placeholder="Add a comment..." rows="2" data-id="${achievement.id}"></textarea>
+                        <div class="form-actions">
+                            <button class="button post-comment-btn" data-id="${achievement.id}">Post Comment</button>
+                        </div>
+                        <div class="comment-list">
+                            ${achievement.comments.map(comment => `
+                                <div class="comment">
+                                    <div class="comment-avatar">${comment.author[0]}</div>
+                                    <div class="comment-content">
+                                        <div class="comment-author">${comment.author}</div>
+                                        <div class="comment-text">${comment.text}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                achievementCardsContainer.appendChild(achievementCard);
+            });
+        }
+
+        // Render leaderboard
+        function renderLeaderboard() {
+            if (!leaderboardList) {
+                console.error('Leaderboard list not found');
+                return;
+            }
+            leaderboardList.innerHTML = '';
+            
+            leaderboard.forEach((entry, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const leaderboardItem = document.createElement('div');
+                leaderboardItem.className = 'leaderboard-item';
+                leaderboardItem.innerHTML = `
+                    <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
+                    <div class="leaderboard-name">${entry.name}</div>
+                    <div class="leaderboard-score">${entry.score} points</div>
+                `;
+                leaderboardList.appendChild(leaderboardItem);
+            });
+        }
+
+        // Render professors
+        function renderProfessors() {
+            if (!professorList) {
+                console.error('Professor list not found');
+                return;
+            }
+            professorList.innerHTML = '';
+            
+            professors.forEach(professor => {
+                const professorCard = document.createElement('div');
+                professorCard.className = 'professor-card';
+                professorCard.innerHTML = `
+                    <div class="professor-avatar">${professor.name[3]}</div>
+                    <div class="professor-info">
+                        <div class="professor-name">${professor.name}</div>
+                        <div class="professor-title">${professor.title}</div>
+                        <div class="professor-subjects">
+                            ${professor.subjects.map(subject => `<span class="badge">${subject}</span>`).join('')}
+                        </div>
+                        <div class="professor-contact">
+                            <button class="button message-professor-btn" data-name="${professor.name}">Message</button>
+                        </div>
+                    </div>
+                `;
+                professorList.appendChild(professorCard);
+            });
+        }
+
+        // Render chat messages for a specific channel
+        function renderChatMessages(channel) {
+            if (!messageList) {
+                console.error('Message list not found');
+                return;
+            }
+            messageList.innerHTML = '';
+            
+            const filteredMessages = chatMessages.filter(msg => msg.channel === channel);
+            filteredMessages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message chat-message';
+                messageElement.innerHTML = `
+                    <div class="message-avatar">${message.author[0]}</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <div class="message-author">${message.author}</div>
+                            <div class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</div>
+                        </div>
+                        <div class="message-text">${message.content}</div>
+                    </div>
+                `;
+                messageList.appendChild(messageElement);
+            });
+            
+            messageList.scrollTop = messageList.scrollHeight;
+        }
+
+        // Render general chat by default
+        function renderGeneralChat() {
+            renderChatMessages('general');
+        }
+
+        // Get current channel from active channel element
+        function getCurrentChannel() {
+            const activeChannel = document.querySelector('.channel.active');
+            return activeChannel ? activeChannel.querySelector('span:nth-child(2)').textContent : 'general';
+        }
+
+        // Send chat message
+        function sendChatMessage() {
+            const content = chatInput.value.trim();
+            if (!content) {
+                showToast('Message cannot be empty', 'warning');
+                return;
+            }
+
+            const message = {
+                id: chatMessages.length + 1,
+                author: currentUser.name,
+                content,
+                timestamp: new Date().toISOString(),
+                channel: getCurrentChannel()
+            };
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                try {
+                    socket.send(JSON.stringify(message));
+                } catch (e) {
+                    console.error('Error sending WebSocket message:', e);
+                    chatMessages.push(message);
+                    renderChatMessages(message.channel);
+                }
+            } else {
+                chatMessages.push(message);
+                renderChatMessages(message.channel);
+            }
+            chatInput.value = '';
+        }
+
+        // Send private message
+        function sendPrivateMessage(recipient, content) {
+            if (!recipient || !content.trim()) {
+                showToast('Recipient or message cannot be empty', 'warning');
+                return false;
+            }
+
+            const message = {
+                id: chatMessages.length + 1,
+                author: currentUser.name,
+                content: `Private message to ${recipient}: ${content}`,
+                timestamp: new Date().toISOString(),
+                channel: 'private'
+            };
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                try {
+                    socket.send(JSON.stringify(message));
+                } catch (e) {
+                    console.error('Error sending private WebSocket message:', e);
+                    chatMessages.push(message);
+                }
+            } else {
+                chatMessages.push(message);
+            }
+            showToast(`Message sent to ${recipient}!`);
+            return true;
+        }
+
+        // Render student profile
+        function renderStudentProfile(studentName) {
+            const student = students[studentName];
+            if (!student) {
+                showToast('Student profile not found', 'warning');
+                return;
+            }
+
+            try {
+                document.getElementById('profile-modal-body').innerHTML = `
+                    <div class="student-profile">
+                        <div class="profile-header">
+                            <div class="profile-avatar">${student.avatar}</div>
+                            <div class="profile-info">
+                                <div class="profile-name">${studentName}</div>
+                                <div class="profile-status">${student.status}</div>
+                                <div class="profile-points">${student.points} points</div>
+                            </div>
+                        </div>
+                        <div class="profile-bio">${student.bio}</div>
+                        <div class="profile-section">
+                            <div class="section-title">Achievements (${student.achievements})</div>
+                            <div class="profile-achievements">
+                                ${achievements
+                                    .filter(ach => ach.author === studentName)
+                                    .map(ach => `<span class="profile-achievement">${ach.title}</span>`)
+                                    .join('')}
+                            </div>
+                        </div>
+                        <div class="profile-section">
+                            <div class="section-title">Skills</div>
+                            <div class="profile-skills">
+                                ${student.skills.map(skill => `<span class="profile-skill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="profile-section">
+                            <div class="section-title">Interests</div>
+                            <div class="profile-interests">
+                                ${student.interests.map(interest => `<span class="profile-interest">${interest}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                profileModalOverlay.classList.add('active');
+                sendMessageBtn.dataset.recipient = studentName;
+            } catch (e) {
+                console.error('Error rendering student profile:', e);
+                showToast('Error loading profile', 'danger');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✅' : type === 'warning' ? '⚠' : '❌'}</span>
+                <span class="toast-message">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Switch to tab
+        function switchToTab(tabName) {
+            try {
+                tabs.forEach(t => t.classList.remove('active'));
+                contentAreas.forEach(area => area.classList.remove('active'));
+                const tab = document.querySelector(`.tab[data-tab="${tabName}"]`);
+                const content = document.getElementById(tabName);
+                if (tab && content) {
+                    tab.classList.add('active');
+                    content.classList.add('active');
+                } else {
+                    console.error(`Tab or content not found for: ${tabName}`);
+                }
+            } catch (e) {
+                console.error('Error switching tab:', e);
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchToTab(tab.dataset.tab);
+                });
+            });
+
+            // Modal close buttons
+            modalCloseButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modalOverlay.classList.remove('active');
+                    profileModalOverlay.classList.remove('active');
+                    messageModalOverlay.classList.remove('active');
+                });
+            });
+
+            // Post achievement
+            if (postAchievementBtn) {
+                postAchievementBtn.addEventListener('click', () => {
+                    try {
+                        const title = document.getElementById('achievement-title').value.trim();
+                        const description = document.getElementById('achievement-description').value.trim();
+                        const tags = document.getElementById('achievement-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+                        if (!title || !description) {
+                            showToast('Please fill in all fields', 'warning');
+                            return;
+                        }
+
+                        const newAchievement = {
+                            id: achievements.length + 1,
+                            title,
+                            description,
+                            author: currentUser.name,
+                            date: new Date().toISOString().split('T')[0],
+                            tags,
+                            likes: 0,
+                            comments: []
+                        };
+
+                        achievements.unshift(newAchievement);
+                        renderAchievements();
+                        showToast('Achievement posted successfully!');
+                        
+                        document.getElementById('achievement-title').value = '';
+                        document.getElementById('achievement-description').value = '';
+                        document.getElementById('achievement-tags').value = '';
+                    } catch (e) {
+                        console.error('Error posting achievement:', e);
+                        showToast('Error posting achievement', 'danger');
+                    }
+                });
+            }
+
+            // Ask question
+            if (askQuestionBtn) {
+                askQuestionBtn.addEventListener('click', () => {
+                    try {
+                        const title = document.getElementById('question-title').value.trim();
+                        const text = document.getElementById('question-text').value.trim();
+                        const professor = document.getElementById('professor-select').value;
+
+                        if (!title || !text || !professor) {
+                            showToast('Please fill in all fields', 'warning');
+                            return;
+                        }
+
+                        showToast('Question submitted successfully!');
+                        
+                        document.getElementById('question-title').value = '';
+                        document.getElementById('question-text').value = '';
+                        document.getElementById('professor-select').value = '';
+                    } catch (e) {
+                        console.error('Error submitting question:', e);
+                        showToast('Error submitting question', 'danger');
+                    }
+                });
+            }
+
+            // Send chat message
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendChatMessage();
+                    }
+                });
+            }
+
+            if (sendChatBtn) {
+                sendChatBtn.addEventListener('click', sendChatMessage);
+            }
+
+            // Channel switching
+            channels.forEach(channel => {
+                channel.addEventListener('click', () => {
+                    try {
+                        channels.forEach(c => c.classList.remove('active'));
+                        channel.classList.add('active');
+                        const channelName = channel.querySelector('span:nth-child(2)').textContent;
+                        const tabName = channel.dataset.tab;
+
+                        if (tabName) {
+                            switchToTab(tabName);
+                            document.querySelector('.channel-name').textContent = `# ${channelName}`;
+                            document.querySelector('.channel-topic').textContent = `View ${channelName} content`;
+                        } else if (['general', 'mathematics', 'computer-science', 'physics', 'biology', 'announcements', 'tutoring'].includes(channelName)) {
+                            renderChatMessages(channelName);
+                            document.querySelector('.channel-name').textContent = `# ${channelName}`;
+                            document.querySelector('.channel-topic').textContent = `Discuss ${channelName} topics`;
+                            switchToTab('chat');
+                        } else {
+                            console.warn(`Unknown channel: ${channelName}`);
+                        }
+                    } catch (e) {
+                        console.error('Error switching channel:', e);
+                    }
+                });
+            });
+
+            // Member profile viewing
+            document.querySelectorAll('.member').forEach(member => {
+                member.addEventListener('click', () => {
+                    const memberName = member.querySelector('.member-name').textContent;
+                    if (students[memberName]) {
+                        renderStudentProfile(memberName);
+                    } else {
+                        showToast('Profile not available for professors yet', 'warning');
+                    }
+                });
+            });
+
+            // Send message from profile modal
+            if (sendMessageBtn) {
+                sendMessageBtn.addEventListener('click', () => {
+                    try {
+                        const recipient = sendMessageBtn.dataset.recipient;
+                        if (!recipient) {
+                            showToast('No recipient selected', 'warning');
+                            return;
+                        }
+                        messageTextInput.value = '';
+                        sendMessageSubmit.dataset.recipient = recipient;
+                        messageModalOverlay.classList.add('active');
+                    } catch (e) {
+                        console.error('Error opening message modal:', e);
+                    }
+                });
+            }
+
+            // Send message from message modal
+            if (sendMessageSubmit) {
+                sendMessageSubmit.addEventListener('click', () => {
+                    try {
+                        const recipient = sendMessageSubmit.dataset.recipient;
+                        const content = messageTextInput.value.trim();
+                        if (sendPrivateMessage(recipient, content)) {
+                            messageModalOverlay.classList.remove('active');
+                            profileModalOverlay.classList.remove('active');
+                        }
+                    } catch (e) {
+                        console.error('Error sending message:', e);
+                        showToast('Error sending message', 'danger');
+                    }
+                });
+            }
+
+            // Message professor
+            if (professorList) {
+                professorList.addEventListener('click', (e) => {
+                    const target = e.target.closest('.message-professor-btn');
+                    if (!target) return;
+
+                    try {
+                        const professorName = target.dataset.name;
+                        messageTextInput.value = '';
+                        sendMessageSubmit.dataset.recipient = professorName;
+                        messageModalOverlay.classList.add('active');
+                    } catch (e) {
+                        console.error('Error opening professor message modal:', e);
+                    }
+                });
+            }
+
+            // Achievement interactions
+            if (achievementCardsContainer) {
+                achievementCardsContainer.addEventListener('click', (e) => {
+                    const target = e.target.closest('.action-button, .post-comment-btn');
+                    if (!target) return;
+
+                    try {
+                        const id = parseInt(target.dataset.id);
+                        const achievement = achievements.find(ach => ach.id === id);
+                        if (!achievement) {
+                            console.error(`Achievement not found: ${id}`);
+                            return;
+                        }
+
+                        if (target.classList.contains('like-btn')) {
+                            achievement.likes++;
+                            renderAchievements();
+                            showToast('Liked achievement!');
+                        } else if (target.classList.contains('comment-btn')) {
+                            const commentSection = document.getElementById(`comment-section-${id}`);
+                            if (commentSection) {
+                                commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+                            }
+                        } else if (target.classList.contains('view-btn')) {
+                            modalBody.innerHTML = `
+                                <div class="achievement-title">${achievement.title}</div>
+                                <div class="achievement-details">${achievement.description}</div>
+                                <div class="achievement-footer">
+                                    <div>Posted by ${achievement.author} on ${achievement.date}</div>
+                                    <div>${achievement.likes} likes • ${achievement.comments.length} comments</div>
+                                </div>
+                                <div class="achievement-tags">
+                                    ${achievement.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}
+                                </div>
+                                <div class="comment-section">
+                                    <div class="comment-list">
+                                        ${achievement.comments.map(comment => `
+                                            <div class="comment">
+                                                <div class="comment-avatar">${comment.author[0]}</div>
+                                                <div class="comment-content">
+                                                    <div class="comment-author">${comment.author}</div>
+                                                    <div class="comment-text">${comment.text}</div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                            modalOverlay.classList.add('active');
+                        } else if (target.classList.contains('post-comment-btn')) {
+                            const commentInput = document.querySelector(`.comment-input[data-id="${id}"]`);
+                            const commentText = commentInput.value.trim();
+
+                            if (!commentText) {
+                                showToast('Comment cannot be empty', 'warning');
+                                return;
+                            }
+
+                            achievement.comments.push({
+                                id: achievement.comments.length + 1,
+                                author: currentUser.name,
+                                text: commentText,
+                                timestamp: new Date().toISOString()
+                            });
+
+                            renderAchievements();
+                            showToast('Comment posted!');
+                            commentInput.value = '';
+                        }
+                    } catch (e) {
+                        console.error('Error handling achievement interaction:', e);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

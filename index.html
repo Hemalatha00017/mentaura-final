@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentaura - Your Gateway to Learning</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- Add AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Add i18next -->
+    <script src="https://unpkg.com/i18next@21.6.10/i18next.min.js"></script>
+    <script src="https://unpkg.com/i18next-browser-languagedetector@6.1.3/i18nextBrowserLanguageDetector.min.js"></script>
+</head>
+<body>
+    <!-- Script to handle direct access to landing page -->
+    <script>
+        // Initialize i18next
+        i18next
+            .use(i18nextBrowserLanguageDetector)
+            .init({
+                fallbackLng: 'en',
+                resources: {
+                    en: {
+                        translation: {
+                            "title": "Your Gateway to Limitless Knowledge",
+                            "subtitle": "Achieve your learning goals with personalized AI-powered education",
+                            "start_journey": "START YOUR JOURNEY",
+                            "learn_more": "LEARN MORE",
+                            "features_title": "Why Choose Mentaura?",
+                            "feature1_title": "AI-Powered Learning",
+                            "feature1_desc": "Personalized education with cutting-edge artificial intelligence",
+                            "feature2_title": "Comprehensive Courses",
+                            "feature2_desc": "Structured learning paths across various subjects",
+                            "feature3_title": "Interactive Conversations",
+                            "feature3_desc": "Natural dialogue with your AI tutor for better understanding",
+                            "feature4_title": "Learning Games",
+                            "feature4_desc": "Educational games that reinforce concepts while having fun",
+                            "about_title": "About Mentaura",
+                            "about_text1": "Mentaura is an innovative AI-powered educational platform designed to revolutionize the way you learn. We combine cutting-edge artificial intelligence with proven educational methodologies to create a personalized learning experience.",
+                            "about_text2": "Our mission is to make quality education accessible to everyone, regardless of their background or location. With Mentaura, you can learn at your own pace, get instant feedback, and track your progress as you master new skills and knowledge.",
+                            "contact_title": "Contact Us",
+                            "name_label": "Name",
+                            "email_label": "Email",
+                            "message_label": "Message",
+                            "send_message": "Send Message",
+                            "privacy": "Privacy Policy",
+                            "terms": "Terms of Service",
+                            "contact_us": "Contact Us",
+                            "copyright": "© 2025 Mentaura. All rights reserved."
+                        }
+                    },
+                    es: {
+                        translation: {
+                            "title": "Tu Puerta de Entrada al Conocimiento Ilimitado",
+                            "subtitle": "Alcanza tus objetivos de aprendizaje con educación personalizada impulsada por IA",
+                            "start_journey": "COMENZAR TU VIAJE",
+                            "learn_more": "SABER MÁS",
+                            "features_title": "¿Por Qué Elegir Mentaura?",
+                            "feature1_title": "Aprendizaje con IA",
+                            "feature1_desc": "Educación personalizada con inteligencia artificial de vanguardia",
+                            "feature2_title": "Cursos Integrales",
+                            "feature2_desc": "Rutas de aprendizaje estructuradas en diversas materias",
+                            "feature3_title": "Conversaciones Interactivas",
+                            "feature3_desc": "Diálogo natural con tu tutor de IA para mejor comprensión",
+                            "feature4_title": "Juegos de Aprendizaje",
+                            "feature4_desc": "Juegos educativos que refuerzan conceptos mientras te diviertes",
+                            "about_title": "Sobre Mentaura",
+                            "about_text1": "Mentaura es una plataforma educativa innovadora impulsada por IA diseñada para revolucionar la forma en que aprendes. Combinamos inteligencia artificial de vanguardia con metodologías educativas probadas para crear una experiencia de aprendizaje personalizada.",
+                            "about_text2": "Nuestra misión es hacer que la educación de calidad sea accesible para todos, independientemente de su origen o ubicación. Con Mentaura, puedes aprender a tu propio ritmo, obtener retroalimentación instantánea y seguir tu progreso mientras dominas nuevas habilidades y conocimientos.",
+                            "contact_title": "Contáctanos",
+                            "name_label": "Nombre",
+                            "email_label": "Correo Electrónico",
+                            "message_label": "Mensaje",
+                            "send_message": "Enviar Mensaje",
+                            "privacy": "Política de Privacidad",
+                            "terms": "Términos de Servicio",
+                            "contact_us": "Contáctanos",
+                            "copyright": "© 2025 Mentaura. Todos los derechos reservados."
+                        }
+                    },
+                    fr: {
+                        translation: {
+                            "title": "Votre Portail vers un Savoir Illimité",
+                            "subtitle": "Atteignez vos objectifs d'apprentissage avec une éducation personnalisée alimentée par l'IA",
+                            "start_journey": "COMMENCER VOTRE VOYAGE",
+                            "learn_more": "EN SAVOIR PLUS",
+                            "features_title": "Pourquoi Choisir Mentaura?",
+                            "feature1_title": "Apprentissage par IA",
+                            "feature1_desc": "Éducation personnalisée avec intelligence artificielle de pointe",
+                            "feature2_title": "Cours Complets",
+                            "feature2_desc": "Parcours d'apprentissage structurés dans diverses matières",
+                            "feature3_title": "Conversations Interactives",
+                            "feature3_desc": "Dialogue naturel avec votre tuteur IA pour une meilleure compréhension",
+                            "feature4_title": "Jeux d'Apprentissage",
+                            "feature4_desc": "Jeux éducatifs qui renforcent les concepts tout en s'amusant",
+                            "about_title": "À Propos de Mentaura",
+                            "about_text1": "Mentaura est une plateforme éducative innovante alimentée par l'IA conçue pour révolutionner votre façon d'apprendre. Nous combinons l'intelligence artificielle de pointe avec des méthodologies éducatives éprouvées pour créer une expérience d'apprentissage personnalisée.",
+                            "about_text2": "Notre mission est de rendre l'éducation de qualité accessible à tous, quel que soit leur origine ou leur localisation. Avec Mentaura, vous pouvez apprendre à votre rythme, obtenir des retours instantanés et suivre vos progrès tout en maîtrisant de nouvelles compétences et connaissances.",
+                            "contact_title": "Contactez-nous",
+                            "name_label": "Nom",
+                            "email_label": "Email",
+                            "message_label": "Message",
+                            "send_message": "Envoyer le Message",
+                            "privacy": "Politique de Confidentialité",
+                            "terms": "Conditions d'Utilisation",
+                            "contact_us": "Contactez-nous",
+                            "copyright": "© 2025 Mentaura. Tous droits réservés."
+                        }
+                    }
+                }
+            });
+
+        // Check for URL parameter to clear auth state
+        const urlParams = new URLSearchParams(window.location.search);
+        const clearAuth = urlParams.get('no_auth') === 'true';
+        
+        if (clearAuth) {
+            console.log('Clearing authentication state due to URL parameter');
+            localStorage.removeItem('mentaura_user');
+            sessionStorage.removeItem('currentUser');
+            
+            // Remove parameter from URL to prevent multiple clears
+            const newUrl = window.location.pathname;
+            history.pushState({}, document.title, newUrl);
+            
+            // If Firebase is available, sign out
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Firebase signed out successfully');
+                    }).catch(error => {
+                        console.error('Error signing out:', error);
+                    });
+                }
+            });
+        }
+
+        // Function to update content based on selected language
+        function updateContent() {
+            document.querySelector('.hero-content h1').textContent = i18next.t('title');
+            document.querySelector('.hero-content p').textContent = i18next.t('subtitle');
+            document.querySelector('.primary-btn').textContent = i18next.t('start_journey');
+            document.querySelector('.secondary-btn').textContent = i18next.t('learn_more');
+            document.querySelector('.features-section h2').textContent = i18next.t('features_title');
+            document.querySelectorAll('.feature-card h3')[0].textContent = i18next.t('feature1_title');
+            document.querySelectorAll('.feature-card p')[0].textContent = i18next.t('feature1_desc');
+            document.querySelectorAll('.feature-card h3')[1].textContent = i18next.t('feature2_title');
+            document.querySelectorAll('.feature-card p')[1].textContent = i18next.t('feature2_desc');
+            document.querySelectorAll('.feature-card h3')[2].textContent = i18next.t('feature3_title');
+            document.querySelectorAll('.feature-card p')[2].textContent = i18next.t('feature3_desc');
+            document.querySelectorAll('.feature-card h3')[3].textContent = i18next.t('feature4_title');
+            document.querySelectorAll('.feature-card p')[3].textContent = i18next.t('feature4_desc');
+            document.querySelector('.about-section h2').textContent = i18next.t('about_title');
+            document.querySelectorAll('.about-text p')[0].textContent = i18next.t('about_text1');
+            document.querySelectorAll('.about-text p')[1].textContent = i18next.t('about_text2');
+            document.querySelector('.contact-section h2').textContent = i18next.t('contact_title');
+            document.querySelector('label[for="name"]').textContent = i18next.t('name_label');
+            document.querySelector('label[for="email"]').textContent = i18next.t('email_label');
+            document.querySelector('label[for="message"]').textContent = i18next.t('message_label');
+            document.querySelector('.contact-form button').textContent = i18next.t('send_message');
+            document.querySelectorAll('.footer-links a')[0].textContent = i18next.t('privacy');
+            document.querySelectorAll('.footer-links a')[1].textContent = i18next.t('terms');
+            document.querySelectorAll('.footer-links a')[2].textContent = i18next.t('contact_us');
+            document.querySelector('.copyright').textContent = i18next.t('copyright');
+        }
+
+        // Initialize content when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            updateContent();
+            i18next.on('languageChanged', updateContent);
+        });
+    </script>
+    
+    <div class="glow"></div>
+    
+    <div class="landing-container">
+        <header>
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/mentaura-logo.png?v=1" alt="Mentaura Logo" id="logo-img" height="40">
+                    <h1>MENTAURA.AI</h1>
+                </a>
+            </div>
+            <nav>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <div class="language-selector">
+                    <select id="language-select" onchange="i18next.changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                    </select>
+                </div>
+            </nav>
+        </header>
+        
+        <main>
+            <section class="hero-section">
+                <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                    <h1>Your Gateway to Limitless Knowledge</h1>
+                    <p>Achieve your learning goals with personalized AI-powered education</p>
+                    <div class="cta-buttons">
+                        <a href="#" class="primary-btn" onclick="document.getElementById('auth-modal').style.display='block';">START YOUR JOURNEY</a>
+                        <a href="#features" class="secondary-btn">LEARN MORE</a>
+                    </div>
+                </div>
+                <div class="mentaura-visual" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="particles">
+                        <div class="particle p1"></div>
+                        <div class="particle p2"></div>
+                        <div class="particle p3"></div>
+                        <div class="particle p4"></div>
+                        <div class="particle p5"></div>
+                        <div class="particle p6"></div>
+                        <div class="particle p7"></div>
+                        <div class="particle p8"></div>
+                        <div class="particle p9"></div>
+                        <div class="particle p10"></div>
+                        <div class="particle p11"></div>
+                        <div class="particle p12"></div>
+                        <div class="particle p13"></div>
+                        <div class="particle p14"></div>
+                        <div class="particle p15"></div>
+                    </div>
+                    <div class="brain-animation">
+                        <div class="network-node node1"></div>
+                        <div class="network-node node2"></div>
+                        <div class="network-node node3"></div>
+                        <div class="network-node node4"></div>
+                        <div class="network-node node5"></div>
+                        <div class="network-node node6"></div>
+                        <div class="network-connector connector1"></div>
+                        <div class="network-connector connector2"></div>
+                        <div class="network-connector connector3"></div>
+                        <div class="network-connector connector4"></div>
+                        <div class="network-connector connector5"></div>
+                        <div class="floating-icon icon1"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="floating-icon icon2"><i class="fas fa-book"></i></div>
+                        <div class="floating-icon icon3"><i class="fas fa-lightbulb"></i></div>
+                        <div class="floating-icon icon4"><i class="fas fa-chart-line"></i></div>
+                        <div class="floating-icon icon5"><i class="fas fa-rocket"></i></div>
+                    </div>
+                    <div class="mentaura-logo-large">
+                        <div class="logo-circle">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="features-section" id="features">
+                <h2 data-aos="fade-up" data-aos-duration="800">Why Choose Mentaura?</h2>
+                <div class="features-grid">
+                    <div class="feature-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">
+                        <i class="fas fa-brain"></i>
+                        <h3>AI-Powered Learning</h3>
+                        <p>Personalized education with cutting-edge artificial intelligence</p>
+                    </div>
+                    <div class="feature-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Comprehensive Courses</h3>
+                        <p>Structured learning paths across various subjects</p>
+                    </div>
+                    <div class="feature-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300">
+                        <i class="fas fa-comments"></i>
+                        <h3>Interactive Conversations</h3>
+                        <p>Natural dialogue with your AI tutor for better understanding</p>
+                    </div>
+                    <div class="feature-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="400">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>Learning Games</h3>
+                        <p>Educational games that reinforce concepts while having fun</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="about-section" id="about">
+                <h2 data-aos="fade-up" data-aos-duration="800">About Mentaura</h2>
+                <div class="about-content" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="about-text">
+                        <p>Mentaura is an innovative AI-powered educational platform designed to revolutionize the way you learn. We combine cutting-edge artificial intelligence with proven educational methodologies to create a personalized learning experience.</p>
+                        <p>Our mission is to make quality education accessible to everyone, regardless of their background or location. With Mentaura, you can learn at your own pace, get instant feedback, and track your progress as you master new skills and knowledge.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="contact-section" id="contact">
+                <h2 data-aos="fade-up" data-aos-duration="800">Contact Us</h2>
+                <div class="contact-form" data-aos="fade-up" data-aos-duration="1000">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="primary-btn">Send Message</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="logo">
+                    <img src="images/mentaura-logo.png?v=1" alt="Mentaura Logo" height="30">
+                </div>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="#contact">Contact Us</a>
+                </div>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 Mentaura. All rights reserved.
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+            
+            <div class="auth-form-container active" id="login-form-container">
+            <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="auth-button">Login</button>
+            </form>
+            </div>
+            
+            <div class="auth-form-container" id="signup-form-container">
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-username">Username</label>
+                        <input type="text" id="signup-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" required>
+                        <small class="password-criteria">Password must be at least 8 characters with at least one uppercase letter, one number, and one special character.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-learning-type">Learning Type</label>
+                        <select id="signup-learning-type" required>
+                            <option value="" disabled selected>Select your learning purpose</option>
+                            <option value="personal-growth">Personal Growth</option>
+                            <option value="examination">Exam Preparation</option>
+                            <option value="higher-studies">Higher Studies</option>
+                            <option value="professional">Professional Development</option>
+                            <option value="school">School Learning</option>
+                            <option value="hobby">Hobby/Interest</option>
+                </select>
+                    </div>
+                    <button type="submit" class="auth-button">Sign Up</button>
+            </form>         
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+            easing: 'ease-in-out'
+        });
+    </script>
+    
+    <!-- Firebase Scripts - Updated versions for consistency -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    
+    <!-- Load Firebase initialization first -->
+    <script src="modal.js"></script>
+    <!-- Then load API client -->
+    <script src="backend/api_client.js"></script>
+    <!-- Then load app.js (without module type) -->
+    <script src="app.js"></script>
+</body>
+</html>
